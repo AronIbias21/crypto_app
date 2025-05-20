@@ -5,8 +5,8 @@
 
 ## Group Members
 - Aron V. Ibias (@AronIbias21)
-- Jester Tapit (@bobgithub)
-- Ma. Angela Matubis (@carolgithub)
+- Jester Tapit (@-----)
+- Ma. Angela Matubis (@----)
 
 ---
 
