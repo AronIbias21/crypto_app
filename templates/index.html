@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Crypto App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #f8f9fa; }
+        .crypto-card { margin-top: 50px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card crypto-card shadow">
+                <div class="card-header bg-primary text-white text-center">
+                    <h2>Cryptography Playground</h2>
+                </div>
+                <div class="card-body">
+                    <form action="/process" method="post">
+                        <div class="mb-3">
+                            <label for="operation" class="form-label">Select Algorithm</label>
+                            <select class="form-select" id="operation" name="operation" onchange="showInfo()">
+                                <option value="aes_encrypt">AES Encrypt</option>
+                                <option value="aes_decrypt">AES Decrypt</option>
+                                <option value="rsa_encrypt">RSA Encrypt</option>
+                                <option value="rsa_decrypt">RSA Decrypt</option>
+                                <option value="sha256_hash">SHA-256 Hash</option>
+                                <option value="sha3_512_hash">SHA3-512 Hash</option>
+                            </select>
+                            <button type="button" class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#infoModal" onclick="updateModal()">
+                                <small>What is this?</small>
+                            </button>
+                        </div>
+                        <div class="mb-3">
+                            <label for="input_text" class="form-label">Input Text</label>
+                            <textarea class="form-control" id="input_text" name="input_text" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Process</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Algorithm Info Modal -->
+<div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="infoModalLabel">Algorithm Information</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="algorithmInfo">
+        <!-- Info will be inserted here -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const algorithmDescriptions = {
+    'aes_encrypt': `<b>AES (Advanced Encryption Standard) Encrypt</b><br>
+        <i>History:</i> Standardized in 2001, widely used for secure data encryption.<br>
+        <i>Pseudocode:</i> <code>cipher = AES(key); encrypted = cipher.encrypt(plaintext)</code><br>
+        <i>Process:</i> Symmetric block cipher, encrypts data in blocks.<br>
+        <i>Use Cases:</i> File encryption, secure communications.`,
+    'aes_decrypt': `<b>AES Decrypt</b><br>
+        <i>Process:</i> Decrypts AES-encrypted data using the same key.<br>
+        <i>Use Cases:</i> Secure data retrieval.`,
+    'rsa_encrypt': `<b>RSA Encrypt</b><br>
+        <i>History:</i> Invented in 1977, first practical public-key cryptosystem.<br>
+        <i>Pseudocode:</i> <code>ciphertext = pow(plaintext, e, n)</code><br>
+        <i>Process:</i> Asymmetric encryption using public key.<br>
+        <i>Use Cases:</i> Secure key exchange, digital signatures.`,
+    'rsa_decrypt': `<b>RSA Decrypt</b><br>
+        <i>Process:</i> Decrypts RSA-encrypted data using private key.<br>
+        <i>Use Cases:</i> Secure message decryption.`,
+    'sha256_hash': `<b>SHA-256 Hash</b><br>
+        <i>History:</i> Part of SHA-2 family, published in 2001.<br>
+        <i>Pseudocode:</i> <code>hash = SHA256(data)</code><br>
+        <i>Process:</i> Produces a 256-bit hash.<br>
+        <i>Use Cases:</i> Data integrity, password storage.`,
+    'sha3_512_hash': `<b>SHA3-512 Hash</b><br>
+        <i>History:</i> Standardized in 2015, based on Keccak.<br>
+        <i>Pseudocode:</i> <code>hash = SHA3_512(data)</code><br>
+        <i>Process:</i> Produces a 512-bit hash.<br>
+        <i>Use Cases:</i> High-security data integrity.`
+};
+
+function updateModal() {
+    const op = document.getElementById('operation').value;
+    document.getElementById('algorithmInfo').innerHTML = algorithmDescriptions[op];
+}
+function showInfo() {
+    // Optionally update info elsewhere on the page
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

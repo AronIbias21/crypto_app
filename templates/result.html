@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Result - Crypto App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #f8f9fa; }
+        .crypto-card { margin-top: 50px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card crypto-card shadow">
+                <div class="card-header bg-success text-white text-center">
+                    <h2>Result</h2>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label"><b>Output:</b></label>
+                        <textarea class="form-control" rows="5" readonly>{{ result }}</textarea>
+                    </div>
+                    <a href="/" class="btn btn-primary w-100">Back to Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
