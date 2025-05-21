@@ -5,7 +5,7 @@
 
 ## Group Members
 - Aron V. Ibias (@AronIbias21)
-- Jester Tapit (@-----)
+- Jester Tapit (@b-----)
 - Ma. Angela Matubis (@----)
 
 ---
