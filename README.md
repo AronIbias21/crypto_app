@@ -3,21 +3,16 @@
 **Course Name:** [Applied Cryptography - CSAC 329]  
 **Date:** [May 24 2025]
 
-## Group Members
+## Group members
 - Aron V. Ibias (@AronIbias21)
-<<<<<<< HEAD
 - Jester Tapit (@TAPIT08)
-- Ma. Angela Matubis (@gelatinnn)
-=======
-- Jester Tapit (@b-----)
-- Ma. Angela Matubis (@----)
->>>>>>> daff88cd8e263aa33875f86d5dba93b86630ce39
+- Maria Angela Matubis (@gelatinnn)
 
 ---
 
 ## Introduction
 
-This project is a web-based cryptographic application built with Python and Flask. It allows users to experiment with various cryptographic algorithms, including symmetric, asymmetric, and hash functions, and demonstrates the importance of cryptography in secure communications.
+This project is a web-based cryptographic application built with Python and Flask. It allows users to experiment with various cryptographic algorithms, including symmetric, asymmetric, and hash functions, and demonstrates the importance of cryptography in secure communications. The application also features a secure chat module using hybrid encryption, offering users a hands-on experience in how modern cryptographic principles work in real-world scenarios. Initially, the project was developed with basic functionality and limited security measures. Through security assessment and penetration testing, critical vulnerabilities were identified and subsequently addressed to strengthen the application's security posture.
 
 ---
 
@@ -92,6 +87,12 @@ This project is a web-based cryptographic application built with Python and Flas
 - **Integration:** Used for hashing text input.
 
 ---
+## Sample Runs / Output
+![Sample Run](images/sample1.png)
+![Sample Run](images/sample2.png)
+![Sample Run](images/sample3.png)
+![Sample Run](images/sample4.png)
+![Sample Run](images/sample5.png)
 
 ## How to Run
 
@@ -105,6 +106,12 @@ This project is a web-based cryptographic application built with Python and Flas
    ```
 3. **Open in browser:**  
    [http://127.0.0.1:5000](http://127.0.0.1:5000)
+
+---
+## Live Application
+
+The application is deployed and accessible at:  
+[https://aronnn.pythonanywhere.com/](https://aronnn.pythonanywhere.com/)
 
 ---
 
