@@ -22,15 +22,18 @@ def aes_encrypt(plaintext):
     return base64.b64encode(iv + ct).decode()
 
 def aes_decrypt(ciphertext_b64):
-    data = base64.b64decode(ciphertext_b64)
-    iv = data[:16]
-    ct = data[16:]
-    cipher = Cipher(algorithms.AES(KEY), modes.CBC(iv), backend=default_backend())
-    decryptor = cipher.decryptor()
-    padded = decryptor.update(ct) + decryptor.finalize()
-    unpadder = padding.PKCS7(128).unpadder()
-    plaintext = unpadder.update(padded) + unpadder.finalize()
-    return plaintext.decode()
+    try:
+        data = base64.b64decode(ciphertext_b64)
+        iv = data[:16]
+        ct = data[16:]
+        cipher = Cipher(algorithms.AES(KEY), modes.CBC(iv), backend=default_backend())
+        decryptor = cipher.decryptor()
+        padded = decryptor.update(ct) + decryptor.finalize()
+        unpadder = padding.PKCS7(128).unpadder()
+        plaintext = unpadder.update(padded) + unpadder.finalize()
+        return plaintext.decode()
+    except Exception as e:
+        return f"AES decryption error: {str(e)}"
 
 def aes_encrypt_bytes(data):
     iv = os.urandom(16)
@@ -42,14 +45,17 @@ def aes_encrypt_bytes(data):
     return iv + ct
 
 def aes_decrypt_bytes(data):
-    iv = data[:16]
-    ct = data[16:]
-    cipher = Cipher(algorithms.AES(KEY), modes.CBC(iv), backend=default_backend())
-    decryptor = cipher.decryptor()
-    padded = decryptor.update(ct) + decryptor.finalize()
-    unpadder = padding.PKCS7(128).unpadder()
-    plaintext = unpadder.update(padded) + unpadder.finalize()
-    return plaintext
+    try:
+        iv = data[:16]
+        ct = data[16:]
+        cipher = Cipher(algorithms.AES(KEY), modes.CBC(iv), backend=default_backend())
+        decryptor = cipher.decryptor()
+        padded = decryptor.update(ct) + decryptor.finalize()
+        unpadder = padding.PKCS7(128).unpadder()
+        plaintext = unpadder.update(padded) + unpadder.finalize()
+        return plaintext
+    except Exception as e:
+        return f"AES file decryption error: {str(e)}".encode()
 
 # --- DES ---
 def des_encrypt(plaintext):
@@ -61,13 +67,16 @@ def des_encrypt(plaintext):
     return base64.b64encode(iv + ct).decode()
 
 def des_decrypt(ciphertext_b64):
-    data = base64.b64decode(ciphertext_b64)
-    iv = data[:8]
-    ct = data[8:]
-    cipher = DES.new(DES_KEY, DES.MODE_CBC, iv)
-    padded = cipher.decrypt(ct)
-    pad_len = padded[-1]
-    return padded[:-pad_len].decode()
+    try:
+        data = base64.b64decode(ciphertext_b64)
+        iv = data[:8]
+        ct = data[8:]
+        cipher = DES.new(DES_KEY, DES.MODE_CBC, iv)
+        padded = cipher.decrypt(ct)
+        pad_len = padded[-1]
+        return padded[:-pad_len].decode()
+    except Exception as e:
+        return f"DES decryption error: {str(e)}"
 
 def des_encrypt_bytes(data):
     iv = get_random_bytes(8)
@@ -78,12 +87,15 @@ def des_encrypt_bytes(data):
     return iv + ct
 
 def des_decrypt_bytes(data):
-    iv = data[:8]
-    ct = data[8:]
-    cipher = DES.new(DES_KEY, DES.MODE_CBC, iv)
-    padded = cipher.decrypt(ct)
-    pad_len = padded[-1]
-    return padded[:-pad_len]
+    try:
+        iv = data[:8]
+        ct = data[8:]
+        cipher = DES.new(DES_KEY, DES.MODE_CBC, iv)
+        padded = cipher.decrypt(ct)
+        pad_len = padded[-1]
+        return padded[:-pad_len]
+    except Exception as e:
+        return f"DES file decryption error: {str(e)}".encode()
 
 # --- ChaCha20 ---
 CHACHA_KEY = get_random_bytes(32)
@@ -95,12 +107,15 @@ def chacha20_encrypt(plaintext):
     return base64.b64encode(nonce + ct).decode()
 
 def chacha20_decrypt(ciphertext_b64):
-    data = base64.b64decode(ciphertext_b64)
-    nonce = data[:12]
-    ct = data[12:]
-    cipher = ChaCha20.new(key=CHACHA_KEY, nonce=nonce)
-    pt = cipher.decrypt(ct)
-    return pt.decode()
+    try:
+        data = base64.b64decode(ciphertext_b64)
+        nonce = data[:12]
+        ct = data[12:]
+        cipher = ChaCha20.new(key=CHACHA_KEY, nonce=nonce)
+        pt = cipher.decrypt(ct)
+        return pt.decode()
+    except Exception as e:
+        return f"ChaCha20 decryption error: {str(e)}"
 
 def chacha20_encrypt_bytes(data):
     nonce = get_random_bytes(12)
@@ -109,8 +124,11 @@ def chacha20_encrypt_bytes(data):
     return nonce + ct
 
 def chacha20_decrypt_bytes(data):
-    nonce = data[:12]
-    ct = data[12:]
-    cipher = ChaCha20.new(key=CHACHA_KEY, nonce=nonce)
-    pt = cipher.decrypt(ct)
-    return pt
+    try:
+        nonce = data[:12]
+        ct = data[12:]
+        cipher = ChaCha20.new(key=CHACHA_KEY, nonce=nonce)
+        pt = cipher.decrypt(ct)
+        return pt
+    except Exception as e:
+        return f"ChaCha20 file decryption error: {str(e)}".encode()

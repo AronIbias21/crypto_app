@@ -38,8 +38,12 @@ def home():
         if input_mode == 'file' and 'input_file' in request.files:
             file = request.files['input_file']
             if file and file.filename:
-                file_data = file.read()
                 filename = file.filename
+                if not filename.lower().endswith('.txt'):
+                    crypto_result = "Error: Only .txt files are supported for file operations."
+                    file_data = None
+                else:
+                    file_data = file.read()
 
         try:
             # Text mode
