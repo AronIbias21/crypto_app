@@ -136,6 +136,20 @@
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Process</button>
                     </form>
+                    <!-- Symmetric Tab Output -->
+                    {% if request.form.get('active_tab', 'symmetric') == 'symmetric' %}
+                        {% if crypto_result %}
+                            <div class="alert alert-info mt-3" role="alert">
+                                <strong>Output:</strong><br>
+                                {% if crypto_file %}
+                                    {{ crypto_result }}<br>
+                                    <a href="{{ url_for('download_crypto_file') }}" class="btn btn-success mt-2">Download Result File</a>
+                                {% else %}
+                                    <pre style="white-space: pre-wrap; word-break: break-all;">{{ crypto_result }}</pre>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -173,6 +187,20 @@
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Process</button>
                     </form>
+                    <!-- Asymmetric Tab Output -->
+                    {% if request.form.get('active_tab') == 'asymmetric' %}
+                        {% if crypto_result %}
+                            <div class="alert alert-info mt-3" role="alert">
+                                <strong>Output:</strong><br>
+                                {% if crypto_file %}
+                                    {{ crypto_result }}<br>
+                                    <a href="{{ url_for('download_crypto_file') }}" class="btn btn-success mt-2">Download Result File</a>
+                                {% else %}
+                                    <pre style="white-space: pre-wrap; word-break: break-all;">{{ crypto_result }}</pre>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -212,6 +240,15 @@
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Process</button>
                     </form>
+                    <!-- Hash Tab Output -->
+                    {% if request.form.get('active_tab') == 'hash' %}
+                        {% if crypto_result %}
+                            <div class="alert alert-info mt-3" role="alert">
+                                <strong>Output:</strong><br>
+                                <pre style="white-space: pre-wrap; word-break: break-all;">{{ crypto_result }}</pre>
+                            </div>
+                        {% endif %}
+                    {% endif %}
                 </div>
             </div>
         </div>
