@@ -7,6 +7,65 @@ from io import BytesIO
 app = Flask(__name__)
 app.secret_key = os.urandom(24)  # Needed for session
 
+ALGORITHM_INFO = {
+    "aes": {
+        "name": "AES (Advanced Encryption Standard)",
+        "type": "Symmetric",
+        "history": "AES was established as the encryption standard by NIST in 2001, replacing DES.",
+        "description": "AES is a block cipher that encrypts data in 128-bit blocks using 128, 192, or 256-bit keys.",
+        "use_cases": "Used for secure data storage, file encryption, and secure communications."
+    },
+    "des": {
+        "name": "DES (Data Encryption Standard)",
+        "type": "Symmetric",
+        "history": "DES was adopted as a federal standard in 1977 but is now considered insecure.",
+        "description": "DES encrypts data in 64-bit blocks using a 56-bit key.",
+        "use_cases": "Legacy systems, replaced by AES for most applications."
+    },
+    "chacha20": {
+        "name": "ChaCha20",
+        "type": "Symmetric",
+        "history": "ChaCha20 was designed by Daniel J. Bernstein as a faster, more secure alternative to Salsa20.",
+        "description": "A stream cipher known for speed and security, often used in TLS and VPNs.",
+        "use_cases": "TLS, VPNs, disk encryption."
+    },
+    "rsa": {
+        "name": "RSA",
+        "type": "Asymmetric",
+        "history": "RSA was invented in 1977 by Rivest, Shamir, and Adleman.",
+        "description": "RSA uses a pair of keys for encryption and decryption, based on the difficulty of factoring large numbers.",
+        "use_cases": "Secure key exchange, digital signatures, email encryption."
+    },
+    "sha256": {
+        "name": "SHA-256",
+        "type": "Hash",
+        "history": "SHA-256 is part of the SHA-2 family, published by NIST in 2001.",
+        "description": "Produces a 256-bit hash value, widely used for data integrity.",
+        "use_cases": "Digital signatures, certificates, file integrity."
+    },
+    "sha3_512": {
+        "name": "SHA3-512",
+        "type": "Hash",
+        "history": "SHA-3 was standardized in 2015 as an alternative to SHA-2.",
+        "description": "Produces a 512-bit hash using the Keccak algorithm.",
+        "use_cases": "Data integrity, blockchain, digital signatures."
+    },
+    "sha1": {
+        "name": "SHA-1",
+        "type": "Hash",
+        "history": "SHA-1 was designed by the NSA in 1995, now considered weak.",
+        "description": "Produces a 160-bit hash, deprecated for most security uses.",
+        "use_cases": "Legacy systems, not recommended for new applications."
+    },
+    "blake2b": {
+        "name": "BLAKE2b",
+        "type": "Hash",
+        "history": "BLAKE2 was designed in 2012 as a faster, more secure alternative to MD5 and SHA-1.",
+        "description": "Produces variable-length hashes, optimized for speed and security.",
+        "use_cases": "File integrity, password hashing, digital signatures."
+    }
+}
+
 @app.route('/', methods=['GET', 'POST'])
 def home():
     crypto_result = None
@@ -187,7 +246,8 @@ def home():
         chat_result=chat_result,
         chat_history=session.get('chat_history', []),
         crypto_file=crypto_file,
-        input_mode=input_mode
+        input_mode=input_mode,
+        algorithm_info=ALGORITHM_INFO
     )
 
 @app.route('/download_crypto_file')

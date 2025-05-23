@@ -125,11 +125,14 @@
                         </div>
                         <div class="mb-3">
                             <label for="symmetric_algorithm" class="form-label">Algorithm</label>
-                            <select class="form-select" id="symmetric_algorithm" name="symmetric_algorithm" onchange="updateSymmetricOperation()">
-                                <option value="aes" {% if request.form.get('symmetric_algorithm', 'aes') == 'aes' %}selected{% endif %}>AES</option>
-                                <option value="des" {% if request.form.get('symmetric_algorithm') == 'des' %}selected{% endif %}>DES</option>
-                                <option value="chacha20" {% if request.form.get('symmetric_algorithm') == 'chacha20' %}selected{% endif %}>ChaCha20</option>
-                            </select>
+                            <div class="input-group">
+                                <select class="form-select" id="symmetric_algorithm" name="symmetric_algorithm" onchange="updateSymmetricOperation()">
+                                    <option value="aes" {% if request.form.get('symmetric_algorithm', 'aes') == 'aes' %}selected{% endif %}>AES</option>
+                                    <option value="des" {% if request.form.get('symmetric_algorithm') == 'des' %}selected{% endif %}>DES</option>
+                                    <option value="chacha20" {% if request.form.get('symmetric_algorithm') == 'chacha20' %}selected{% endif %}>ChaCha20</option>
+                                </select>
+                                <button type="button" class="btn btn-outline-info" onclick="showAlgorithmInfo(document.getElementById('symmetric_algorithm').value)">Info</button>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="symmetric_operation" class="form-label">Operation</label>
@@ -229,9 +232,12 @@ window.onload = function() {
                         </div>
                         <div class="mb-3">
                             <label for="asymmetric_algorithm" class="form-label">Algorithm</label>
-                            <select class="form-select" id="asymmetric_algorithm" name="asymmetric_algorithm" onchange="updateAsymmetricOperation()">
-                                <option value="rsa" {% if request.form.get('asymmetric_algorithm', 'rsa') == 'rsa' %}selected{% endif %}>RSA</option>
-                            </select>
+                            <div class="input-group">
+                                <select class="form-select" id="asymmetric_algorithm" name="asymmetric_algorithm" onchange="updateAsymmetricOperation()">
+                                    <option value="rsa" {% if request.form.get('asymmetric_algorithm', 'rsa') == 'rsa' %}selected{% endif %}>RSA</option>
+                                </select>
+                                <button type="button" class="btn btn-outline-info" onclick="showAlgorithmInfo(document.getElementById('asymmetric_algorithm').value)">Info</button>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="asymmetric_operation" class="form-label">Operation</label>
@@ -286,12 +292,15 @@ window.onload = function() {
                         </div>
                         <div class="mb-3">
                             <label for="operation_hash" class="form-label">Select Hash Function</label>
-                            <select class="form-select" id="operation_hash" name="operation">
-                                <option value="sha256_hash">SHA-256 Hash</option>
-                                <option value="sha3_512_hash">SHA3-512 Hash</option>
-                                <option value="sha1_hash">SHA-1 Hash</option>
-                                <option value="blake2b_hash">BLAKE2b Hash</option>
-                            </select>
+                            <div class="input-group">
+                                <select class="form-select" id="operation_hash" name="operation">
+                                    <option value="sha256_hash" {% if request.form.get('operation', 'sha256_hash') == 'sha256_hash' %}selected{% endif %}>SHA-256 Hash</option>
+                                    <option value="sha3_512_hash" {% if request.form.get('operation') == 'sha3_512_hash' %}selected{% endif %}>SHA3-512 Hash</option>
+                                    <option value="sha1_hash" {% if request.form.get('operation') == 'sha1_hash' %}selected{% endif %}>SHA-1 Hash</option>
+                                    <option value="blake2b_hash" {% if request.form.get('operation') == 'blake2b_hash' %}selected{% endif %}>BLAKE2b Hash</option>
+                                </select>
+                                <button type="button" class="btn btn-outline-info" onclick="showAlgorithmInfo(document.getElementById('operation_hash').value.replace('_hash',''))">Info</button>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Process</button>
                     </form>
@@ -406,6 +415,24 @@ window.onload = function() {
       </div>
       <div class="modal-body" id="algorithmInfo">
         <!-- Info will be inserted here -->
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Algorithm Detailed Info Modal -->
+<div class="modal fade" id="algorithmInfoModal" tabindex="-1" aria-labelledby="algorithmInfoModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="algorithmInfoModalLabel">Algorithm Info</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h4 id="algName"></h4>
+        <p><b>Type:</b> <span id="algType"></span></p>
+        <p><b>History:</b> <span id="algHistory"></span></p>
+        <p><b>Description:</b> <span id="algDesc"></span></p>
+        <p><b>Use Cases:</b> <span id="algUse"></span></p>
       </div>
     </div>
   </div>
@@ -619,6 +646,16 @@ function updateModal() {
 function updateInfoModal() {
     const op = document.getElementById('operation').value;
     document.getElementById('algorithmInfo').innerHTML = algorithmInfo[op] || "No information available.";
+}
+function showAlgorithmInfo(alg) {
+    var info = {{ algorithm_info|tojson }};
+    document.getElementById('algName').innerText = info[alg].name;
+    document.getElementById('algType').innerText = info[alg].type;
+    document.getElementById('algHistory').innerText = info[alg].history;
+    document.getElementById('algDesc').innerText = info[alg].description;
+    document.getElementById('algUse').innerText = info[alg].use_cases;
+    var modal = new bootstrap.Modal(document.getElementById('algorithmInfoModal'));
+    modal.show();
 }
 function copyPublicKey() {
     var textarea = document.getElementById('publicKeyBox');
