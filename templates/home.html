@@ -85,23 +85,29 @@
     <div class="subtitle">A modern playground for cryptography tools and secure chat</div>
     <ul class="nav nav-tabs mt-4" id="mainTab" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link {% if request.form.get('active_tab', 'crypto') == 'crypto' %}active{% endif %}" id="crypto-tab" data-bs-toggle="tab" data-bs-target="#crypto" type="button" role="tab">Crypto Tools</button>
+            <button class="nav-link {% if request.form.get('active_tab', 'symmetric') == 'symmetric' %}active{% endif %}" id="symmetric-tab" data-bs-toggle="tab" data-bs-target="#symmetric" type="button" role="tab">Symmetric Encryption</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {% if request.form.get('active_tab') == 'asymmetric' %}active{% endif %}" id="asymmetric-tab" data-bs-toggle="tab" data-bs-target="#asymmetric" type="button" role="tab">Asymmetric Encryption</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {% if request.form.get('active_tab') == 'hash' %}active{% endif %}" id="hash-tab" data-bs-toggle="tab" data-bs-target="#hash" type="button" role="tab">Hash Functions</button>
         </li>
         <li class="nav-item" role="presentation">
             <button class="nav-link {% if request.form.get('active_tab') == 'chat' %}active{% endif %}" id="chat-tab" data-bs-toggle="tab" data-bs-target="#chat" type="button" role="tab">Secure Chat Protocol</button>
         </li>
     </ul>
     <div class="tab-content">
-        <!-- Crypto Tools Tab -->
-        <div class="tab-pane fade {% if request.form.get('active_tab', 'crypto') == 'crypto' %}show active{% endif %}" id="crypto" role="tabpanel">
+        <!-- Symmetric Encryption Tab -->
+        <div class="tab-pane fade {% if request.form.get('active_tab', 'symmetric') == 'symmetric' %}show active{% endif %}" id="symmetric" role="tabpanel">
             <div class="card crypto-card shadow">
                 <div class="card-header bg-primary text-white text-center">
-                    <h2>Cryptography Playground</h2>
+                    <h2>Symmetric Encryption</h2>
                 </div>
                 <div class="card-body">
                     <form action="/" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="form_type" value="crypto_tool">
-                        <input type="hidden" name="active_tab" value="crypto">
+                        <input type="hidden" name="active_tab" value="symmetric">
                         <div class="mb-3">
                             <label class="form-label">Mode</label>
                             <select class="form-select" id="input_mode" name="input_mode" onchange="toggleInputMode()">
@@ -118,47 +124,94 @@
                             <input class="form-control" type="file" id="input_file" name="input_file">
                         </div>
                         <div class="mb-3">
-                            <label for="operation" class="form-label">Select Operation</label>
-                            <div class="input-group">
-                                <select class="form-select" id="operation" name="operation" onchange="updateModal(); updateInfoModal();">
-                                    <optgroup label="Symmetric Encryption">
-                                        <option value="aes_encrypt">AES Encrypt</option>
-                                        <option value="aes_decrypt">AES Decrypt</option>
-                                        <option value="des_encrypt">DES Encrypt</option>
-                                        <option value="des_decrypt">DES Decrypt</option>
-                                        <option value="chacha20_encrypt">ChaCha20 Encrypt</option>
-                                        <option value="chacha20_decrypt">ChaCha20 Decrypt</option>
-                                    </optgroup>
-                                    <optgroup label="Asymmetric Encryption">
-                                        <option value="rsa_encrypt">RSA Encrypt</option>
-                                        <option value="rsa_decrypt">RSA Decrypt</option>
-                                    </optgroup>
-                                    <optgroup label="Hash Functions">
-                                        <option value="sha256_hash">SHA-256 Hash</option>
-                                        <option value="sha3_512_hash">SHA3-512 Hash</option>
-                                        <option value="sha1_hash">SHA-1 Hash</option>
-                                        <option value="blake2b_hash">BLAKE2b Hash</option>
-                                    </optgroup>
-                                </select>
-                                <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#instructionModal" onclick="updateModal()">
-                                    ?
-                                </button>
-                                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#infoModal" onclick="updateInfoModal()">
-                                    ℹ️
-                                </button>
-                            </div>
+                            <label for="operation_symmetric" class="form-label">Select Symmetric Operation</label>
+                            <select class="form-select" id="operation_symmetric" name="operation">
+                                <option value="aes_encrypt">AES Encrypt</option>
+                                <option value="aes_decrypt">AES Decrypt</option>
+                                <option value="des_encrypt">DES Encrypt</option>
+                                <option value="des_decrypt">DES Decrypt</option>
+                                <option value="chacha20_encrypt">ChaCha20 Encrypt</option>
+                                <option value="chacha20_decrypt">ChaCha20 Decrypt</option>
+                            </select>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Process</button>
                     </form>
-                    {% if crypto_result %}
-                    <div class="mt-3">
-                        <label class="form-label"><b>Output:</b></label>
-                        <textarea class="form-control" rows="4" readonly>{{ crypto_result }}</textarea>
-                        {% if crypto_file %}
-                        <a href="{{ url_for('download_crypto_file') }}" class="btn btn-success mt-2">Download Result</a>
-                        {% endif %}
-                    </div>
-                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <!-- Asymmetric Encryption Tab -->
+        <div class="tab-pane fade {% if request.form.get('active_tab') == 'asymmetric' %}show active{% endif %}" id="asymmetric" role="tabpanel">
+            <div class="card crypto-card shadow">
+                <div class="card-header bg-primary text-white text-center">
+                    <h2>Asymmetric Encryption</h2>
+                </div>
+                <div class="card-body">
+                    <form action="/" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="form_type" value="crypto_tool">
+                        <input type="hidden" name="active_tab" value="asymmetric">
+                        <div class="mb-3">
+                            <label class="form-label">Mode</label>
+                            <select class="form-select" id="input_mode_asym" name="input_mode" onchange="toggleInputMode()">
+                                <option value="text" {% if input_mode != 'file' %}selected{% endif %}>Text</option>
+                                <option value="file" {% if input_mode == 'file' %}selected{% endif %}>File</option>
+                            </select>
+                        </div>
+                        <div class="mb-3" id="textInputDiv_asym">
+                            <label for="input_text_asym" class="form-label">Input Text</label>
+                            <textarea class="form-control" id="input_text_asym" name="input_text" rows="3">{{ crypto_input or '' }}</textarea>
+                        </div>
+                        <div class="mb-3" id="fileInputDiv_asym" style="display:none;">
+                            <label for="input_file_asym" class="form-label">Input File</label>
+                            <input class="form-control" type="file" id="input_file_asym" name="input_file">
+                        </div>
+                        <div class="mb-3">
+                            <label for="operation_asymmetric" class="form-label">Select Asymmetric Operation</label>
+                            <select class="form-select" id="operation_asymmetric" name="operation">
+                                <option value="rsa_encrypt">RSA Encrypt</option>
+                                <option value="rsa_decrypt">RSA Decrypt</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Process</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Hash Functions Tab -->
+        <div class="tab-pane fade {% if request.form.get('active_tab') == 'hash' %}show active{% endif %}" id="hash" role="tabpanel">
+            <div class="card crypto-card shadow">
+                <div class="card-header bg-primary text-white text-center">
+                    <h2>Hash Functions</h2>
+                </div>
+                <div class="card-body">
+                    <form action="/" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="form_type" value="crypto_tool">
+                        <input type="hidden" name="active_tab" value="hash">
+                        <div class="mb-3">
+                            <label class="form-label">Mode</label>
+                            <select class="form-select" id="input_mode_hash" name="input_mode" onchange="toggleInputMode()">
+                                <option value="text" {% if input_mode != 'file' %}selected{% endif %}>Text</option>
+                                <option value="file" {% if input_mode == 'file' %}selected{% endif %}>File</option>
+                            </select>
+                        </div>
+                        <div class="mb-3" id="textInputDiv_hash">
+                            <label for="input_text_hash" class="form-label">Input Text</label>
+                            <textarea class="form-control" id="input_text_hash" name="input_text" rows="3">{{ crypto_input or '' }}</textarea>
+                        </div>
+                        <div class="mb-3" id="fileInputDiv_hash" style="display:none;">
+                            <label for="input_file_hash" class="form-label">Input File</label>
+                            <input class="form-control" type="file" id="input_file_hash" name="input_file">
+                        </div>
+                        <div class="mb-3">
+                            <label for="operation_hash" class="form-label">Select Hash Function</label>
+                            <select class="form-select" id="operation_hash" name="operation">
+                                <option value="sha256_hash">SHA-256 Hash</option>
+                                <option value="sha3_512_hash">SHA3-512 Hash</option>
+                                <option value="sha1_hash">SHA-1 Hash</option>
+                                <option value="blake2b_hash">BLAKE2b Hash</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Process</button>
+                    </form>
                 </div>
             </div>
         </div>
