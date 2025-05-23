@@ -110,7 +110,7 @@
                         <input type="hidden" name="active_tab" value="symmetric">
                         <div class="mb-3">
                             <label class="form-label">Mode</label>
-                            <select class="form-select" id="input_mode" name="input_mode" onchange="toggleInputMode()">
+                            <select class="form-select" id="input_mode" name="input_mode" onchange="toggleInputMode('symmetric')">
                                 <option value="text" {% if input_mode != 'file' %}selected{% endif %}>Text</option>
                                 <option value="file" {% if input_mode == 'file' %}selected{% endif %}>File</option>
                             </select>
@@ -151,7 +151,7 @@
                         <input type="hidden" name="active_tab" value="asymmetric">
                         <div class="mb-3">
                             <label class="form-label">Mode</label>
-                            <select class="form-select" id="input_mode_asym" name="input_mode" onchange="toggleInputMode()">
+                            <select class="form-select" id="input_mode_asym" name="input_mode" onchange="toggleInputMode('asymmetric')">
                                 <option value="text" {% if input_mode != 'file' %}selected{% endif %}>Text</option>
                                 <option value="file" {% if input_mode == 'file' %}selected{% endif %}>File</option>
                             </select>
@@ -188,7 +188,7 @@
                         <input type="hidden" name="active_tab" value="hash">
                         <div class="mb-3">
                             <label class="form-label">Mode</label>
-                            <select class="form-select" id="input_mode_hash" name="input_mode" onchange="toggleInputMode()">
+                            <select class="form-select" id="input_mode_hash" name="input_mode" onchange="toggleInputMode('hash')">
                                 <option value="text" {% if input_mode != 'file' %}selected{% endif %}>Text</option>
                                 <option value="file" {% if input_mode == 'file' %}selected{% endif %}>File</option>
                             </select>
@@ -319,12 +319,47 @@
   </div>
 </div>
 <script>
-function toggleInputMode() {
-    var mode = document.getElementById('input_mode').value;
-    document.getElementById('textInputDiv').style.display = (mode === 'text') ? '' : 'none';
-    document.getElementById('fileInputDiv').style.display = (mode === 'file') ? '' : 'none';
+function toggleInputMode(tab) {
+    // Hide all input divs by default
+    document.getElementById('textInputDiv').style.display = 'none';
+    document.getElementById('fileInputDiv').style.display = 'none';
+    document.getElementById('textInputDiv_asym').style.display = 'none';
+    document.getElementById('fileInputDiv_asym').style.display = 'none';
+    document.getElementById('textInputDiv_hash').style.display = 'none';
+    document.getElementById('fileInputDiv_hash').style.display = 'none';
+
+    // Show the correct input div based on the selected mode and tab
+    if(tab === 'symmetric') {
+        var mode = document.getElementById('input_mode').value;
+        if(mode === 'file') {
+            document.getElementById('fileInputDiv').style.display = '';
+        } else {
+            document.getElementById('textInputDiv').style.display = '';
+        }
+    } else if(tab === 'asymmetric') {
+        var mode = document.getElementById('input_mode_asym').value;
+        if(mode === 'file') {
+            document.getElementById('fileInputDiv_asym').style.display = '';
+        } else {
+            document.getElementById('textInputDiv_asym').style.display = '';
+        }
+    } else if(tab === 'hash') {
+        var mode = document.getElementById('input_mode_hash').value;
+        if(mode === 'file') {
+            document.getElementById('fileInputDiv_hash').style.display = '';
+        } else {
+            document.getElementById('textInputDiv_hash').style.display = '';
+        }
+    }
 }
-document.addEventListener("DOMContentLoaded", toggleInputMode);
+// On page load, set the correct input fields
+window.onload = function() {
+    // Detect which tab is active
+    var activeTab = 'symmetric';
+    if(document.getElementById('asymmetric-tab').classList.contains('active')) activeTab = 'asymmetric';
+    if(document.getElementById('hash-tab').classList.contains('active')) activeTab = 'hash';
+    toggleInputMode(activeTab);
+};
 
 const instructions = {
     'aes_encrypt': `<b>AES Encrypt</b><br>
