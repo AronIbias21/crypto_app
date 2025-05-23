@@ -289,6 +289,7 @@ window.onload = function() {
                         <div class="mb-3" id="fileInputDiv_hash" style="display:none;">
                             <label for="input_file_hash" class="form-label">Input File</label>
                             <input class="form-control" type="file" id="input_file_hash" name="input_file">
+                            <small class="form-text text-muted">Only .txt files are supported for file hashing.</small>
                         </div>
                         <div class="mb-3">
                             <label for="operation_hash" class="form-label">Select Hash Function</label>
@@ -304,14 +305,11 @@ window.onload = function() {
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Process</button>
                     </form>
-                    <!-- Hash Tab Output -->
-                    {% if request.form.get('active_tab') == 'hash' %}
-                        {% if crypto_result %}
-                            <div class="alert alert-info mt-3" role="alert">
-                                <strong>Output:</strong><br>
-                                <pre style="white-space: pre-wrap; word-break: break-all;">{{ crypto_result }}</pre>
-                            </div>
-                        {% endif %}
+                    {% if crypto_result and request.form.get('active_tab') == 'hash' %}
+                        <div class="alert alert-info mt-3" role="alert">
+                            <strong>Hash Output:</strong><br>
+                            <pre style="white-space: pre-wrap; word-break: break-all;">{{ crypto_result }}</pre>
+                        </div>
                     {% endif %}
                 </div>
             </div>
