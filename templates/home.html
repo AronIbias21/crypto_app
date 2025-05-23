@@ -118,15 +118,27 @@
                             <input class="form-control" type="file" id="input_file" name="input_file">
                         </div>
                         <div class="mb-3">
-                            <label for="operation" class="form-label">Select Algorithm</label>
+                            <label for="operation" class="form-label">Select Operation</label>
                             <div class="input-group">
                                 <select class="form-select" id="operation" name="operation" onchange="updateModal(); updateInfoModal();">
-                                    <option value="aes_encrypt">AES Encrypt</option>
-                                    <option value="aes_decrypt">AES Decrypt</option>
-                                    <option value="rsa_encrypt">RSA Encrypt</option>
-                                    <option value="rsa_decrypt">RSA Decrypt</option>
-                                    <option value="sha256_hash">SHA-256 Hash</option>
-                                    <option value="sha3_512_hash">SHA3-512 Hash</option>
+                                    <optgroup label="Symmetric Encryption">
+                                        <option value="aes_encrypt">AES Encrypt</option>
+                                        <option value="aes_decrypt">AES Decrypt</option>
+                                        <option value="des_encrypt">DES Encrypt</option>
+                                        <option value="des_decrypt">DES Decrypt</option>
+                                        <option value="chacha20_encrypt">ChaCha20 Encrypt</option>
+                                        <option value="chacha20_decrypt">ChaCha20 Decrypt</option>
+                                    </optgroup>
+                                    <optgroup label="Asymmetric Encryption">
+                                        <option value="rsa_encrypt">RSA Encrypt</option>
+                                        <option value="rsa_decrypt">RSA Decrypt</option>
+                                    </optgroup>
+                                    <optgroup label="Hash Functions">
+                                        <option value="sha256_hash">SHA-256 Hash</option>
+                                        <option value="sha3_512_hash">SHA3-512 Hash</option>
+                                        <option value="sha1_hash">SHA-1 Hash</option>
+                                        <option value="blake2b_hash">BLAKE2b Hash</option>
+                                    </optgroup>
                                 </select>
                                 <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#instructionModal" onclick="updateModal()">
                                     ?
