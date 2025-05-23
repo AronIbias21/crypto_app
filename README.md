@@ -114,6 +114,12 @@ The application is deployed and accessible at:
 [https://aronnn.pythonanywhere.com/](https://aronnn.pythonanywhere.com/)
 
 ---
+## Presentation
+
+You can access the project presentation here:  
+[https://www.youtube.com/watch?v=8ixZEIW9Y0M](https://www.youtube.com/watch?v=8ixZEIW9Y0M)
+
+---
 
 ## Contribution Guidelines
 
