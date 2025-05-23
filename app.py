@@ -48,6 +48,14 @@ def home():
                     crypto_result = symmetric.aes_encrypt(crypto_input)
                 elif crypto_operation == 'aes_decrypt':
                     crypto_result = symmetric.aes_decrypt(crypto_input)
+                elif crypto_operation == 'des_encrypt':
+                    crypto_result = symmetric.des_encrypt(crypto_input)
+                elif crypto_operation == 'des_decrypt':
+                    crypto_result = symmetric.des_decrypt(crypto_input)
+                elif crypto_operation == 'chacha20_encrypt':
+                    crypto_result = symmetric.chacha20_encrypt(crypto_input)
+                elif crypto_operation == 'chacha20_decrypt':
+                    crypto_result = symmetric.chacha20_decrypt(crypto_input)
                 elif crypto_operation == 'rsa_encrypt':
                     crypto_result = asymmetric.rsa_encrypt(crypto_input)
                 elif crypto_operation == 'rsa_decrypt':
@@ -56,6 +64,10 @@ def home():
                     crypto_result = hash_functions.sha256_hash(crypto_input)
                 elif crypto_operation == 'sha3_512_hash':
                     crypto_result = hash_functions.sha3_512_hash(crypto_input)
+                elif crypto_operation == 'sha1_hash':
+                    crypto_result = hash_functions.sha1_hash(crypto_input)
+                elif crypto_operation == 'blake2b_hash':
+                    crypto_result = hash_functions.blake2b_hash(crypto_input)
                 else:
                     crypto_result = "Invalid operation selected."
             # File mode
@@ -72,6 +84,30 @@ def home():
                     session['crypto_file_name'] = filename.replace('.enc', '') + '.dec'
                     crypto_result = "File decrypted. Click download."
                     crypto_file = True
+                elif crypto_operation == 'des_encrypt':
+                    result_bytes = symmetric.des_encrypt_bytes(file_data)
+                    session['crypto_file_data'] = base64.b64encode(result_bytes).decode()
+                    session['crypto_file_name'] = filename + '.des'
+                    crypto_result = "File encrypted. Click download."
+                    crypto_file = True
+                elif crypto_operation == 'des_decrypt':
+                    result_bytes = symmetric.des_decrypt_bytes(file_data)
+                    session['crypto_file_data'] = base64.b64encode(result_bytes).decode()
+                    session['crypto_file_name'] = filename.replace('.des', '') + '.dec'
+                    crypto_result = "File decrypted. Click download."
+                    crypto_file = True
+                elif crypto_operation == 'chacha20_encrypt':
+                    result_bytes = symmetric.chacha20_encrypt_bytes(file_data)
+                    session['crypto_file_data'] = base64.b64encode(result_bytes).decode()
+                    session['crypto_file_name'] = filename + '.chacha'
+                    crypto_result = "File encrypted. Click download."
+                    crypto_file = True
+                elif crypto_operation == 'chacha20_decrypt':
+                    result_bytes = symmetric.chacha20_decrypt_bytes(file_data)
+                    session['crypto_file_data'] = base64.b64encode(result_bytes).decode()
+                    session['crypto_file_name'] = filename.replace('.chacha', '') + '.dec'
+                    crypto_result = "File decrypted. Click download."
+                    crypto_file = True
                 elif crypto_operation == 'rsa_encrypt':
                     result_bytes = asymmetric.rsa_encrypt_bytes(file_data)
                     session['crypto_file_data'] = base64.b64encode(result_bytes).decode()
@@ -84,8 +120,16 @@ def home():
                     session['crypto_file_name'] = filename.replace('.rsa', '') + '.dec'
                     crypto_result = "File decrypted. Click download."
                     crypto_file = True
+                elif crypto_operation == 'sha256_hash':
+                    crypto_result = hash_functions.sha256_hash_file(file_data)
+                elif crypto_operation == 'sha3_512_hash':
+                    crypto_result = hash_functions.sha3_512_hash_file(file_data)
+                elif crypto_operation == 'sha1_hash':
+                    crypto_result = hash_functions.sha1_hash_file(file_data)
+                elif crypto_operation == 'blake2b_hash':
+                    crypto_result = hash_functions.blake2b_hash_file(file_data)
                 else:
-                    crypto_result = "File mode only supports AES/RSA encrypt/decrypt."
+                    crypto_result = "File mode only supports AES/DES/ChaCha20/RSA encrypt/decrypt and file hashing."
             else:
                 crypto_result = "No input provided."
         except Exception as e:

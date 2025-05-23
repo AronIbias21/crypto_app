@@ -1,5 +1,6 @@
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
 from cryptography.hazmat.primitives import serialization, hashes
+from Crypto.Random import get_random_bytes
 import base64
 
 def generate_rsa_keypair():
@@ -19,20 +20,67 @@ def generate_rsa_keypair():
     return priv_bytes, pub_bytes
 
 def rsa_encrypt(plaintext):
-    # Example: Encrypt with public key (for text)
-    raise NotImplementedError("rsa_encrypt not implemented yet.")
+    # Encrypt with session public key (PEM, base64)
+    from flask import session
+    pubkey_pem = base64.b64decode(session['public_key'])
+    from cryptography.hazmat.primitives import serialization
+    public_key = serialization.load_pem_public_key(pubkey_pem)
+    ciphertext = public_key.encrypt(
+        plaintext.encode(),
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
+        )
+    )
+    return base64.b64encode(ciphertext).decode()
 
-def rsa_decrypt(ciphertext):
-    # Example: Decrypt with private key (for text)
-    raise NotImplementedError("rsa_decrypt not implemented yet.")
+def rsa_decrypt(ciphertext_b64):
+    # Decrypt with session private key (PEM, base64)
+    from flask import session
+    privkey_pem = base64.b64decode(session['private_key'])
+    from cryptography.hazmat.primitives import serialization
+    private_key = serialization.load_pem_private_key(privkey_pem, password=None)
+    ciphertext = base64.b64decode(ciphertext_b64)
+    plaintext = private_key.decrypt(
+        ciphertext,
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
+        )
+    )
+    return plaintext.decode()
 
 def rsa_encrypt_bytes(data):
-    # Example: Encrypt bytes with public key
-    raise NotImplementedError("rsa_encrypt_bytes not implemented yet.")
+    from flask import session
+    pubkey_pem = base64.b64decode(session['public_key'])
+    from cryptography.hazmat.primitives import serialization
+    public_key = serialization.load_pem_public_key(pubkey_pem)
+    ciphertext = public_key.encrypt(
+        data,
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
+        )
+    )
+    return ciphertext
 
 def rsa_decrypt_bytes(data):
-    # Example: Decrypt bytes with private key
-    raise NotImplementedError("rsa_decrypt_bytes not implemented yet.")
+    from flask import session
+    privkey_pem = base64.b64decode(session['private_key'])
+    from cryptography.hazmat.primitives import serialization
+    private_key = serialization.load_pem_private_key(privkey_pem, password=None)
+    plaintext = private_key.decrypt(
+        data,
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
+        )
+    )
+    return plaintext
 
 def hybrid_encrypt(message, recipient_pubkey, sender_privkey):
     # Placeholder for secure chat
