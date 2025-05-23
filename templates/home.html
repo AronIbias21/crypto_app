@@ -126,16 +126,24 @@
                         <div class="mb-3">
                             <label for="symmetric_algorithm" class="form-label">Algorithm</label>
                             <select class="form-select" id="symmetric_algorithm" name="symmetric_algorithm" onchange="updateSymmetricOperation()">
-                                <option value="aes" selected>AES</option>
-                                <option value="des">DES</option>
-                                <option value="chacha20">ChaCha20</option>
+                                <option value="aes" {% if request.form.get('symmetric_algorithm', 'aes') == 'aes' %}selected{% endif %}>AES</option>
+                                <option value="des" {% if request.form.get('symmetric_algorithm') == 'des' %}selected{% endif %}>DES</option>
+                                <option value="chacha20" {% if request.form.get('symmetric_algorithm') == 'chacha20' %}selected{% endif %}>ChaCha20</option>
                             </select>
                         </div>
                         <div class="mb-3">
                             <label for="symmetric_operation" class="form-label">Operation</label>
                             <select class="form-select" id="symmetric_operation" name="operation">
-                                <option value="aes_encrypt">Encrypt</option>
-                                <option value="aes_decrypt">Decrypt</option>
+                                {% if request.form.get('symmetric_algorithm', 'aes') == 'aes' %}
+                                    <option value="aes_encrypt" {% if request.form.get('operation') == 'aes_encrypt' %}selected{% endif %}>Encrypt</option>
+                                    <option value="aes_decrypt" {% if request.form.get('operation') == 'aes_decrypt' %}selected{% endif %}>Decrypt</option>
+                                {% elif request.form.get('symmetric_algorithm') == 'des' %}
+                                    <option value="des_encrypt" {% if request.form.get('operation') == 'des_encrypt' %}selected{% endif %}>Encrypt</option>
+                                    <option value="des_decrypt" {% if request.form.get('operation') == 'des_decrypt' %}selected{% endif %}>Decrypt</option>
+                                {% elif request.form.get('symmetric_algorithm') == 'chacha20' %}
+                                    <option value="chacha20_encrypt" {% if request.form.get('operation') == 'chacha20_encrypt' %}selected{% endif %}>Encrypt</option>
+                                    <option value="chacha20_decrypt" {% if request.form.get('operation') == 'chacha20_decrypt' %}selected{% endif %}>Decrypt</option>
+                                {% endif %}
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Process</button>
@@ -161,16 +169,27 @@
 function updateSymmetricOperation() {
     var algo = document.getElementById('symmetric_algorithm').value;
     var opSelect = document.getElementById('symmetric_operation');
+    var selectedOp = "{{ request.form.get('operation', '') }}";
     opSelect.innerHTML = '';
     if(algo === 'aes') {
-        opSelect.innerHTML += '<option value="aes_encrypt">Encrypt</option>';
-        opSelect.innerHTML += '<option value="aes_decrypt">Decrypt</option>';
+        opSelect.innerHTML += '<option value="aes_encrypt"'+(selectedOp==='aes_encrypt'?' selected':'')+'>Encrypt</option>';
+        opSelect.innerHTML += '<option value="aes_decrypt"'+(selectedOp==='aes_decrypt'?' selected':'')+'>Decrypt</option>';
     } else if(algo === 'des') {
-        opSelect.innerHTML += '<option value="des_encrypt">Encrypt</option>';
-        opSelect.innerHTML += '<option value="des_decrypt">Decrypt</option>';
+        opSelect.innerHTML += '<option value="des_encrypt"'+(selectedOp==='des_encrypt'?' selected':'')+'>Encrypt</option>';
+        opSelect.innerHTML += '<option value="des_decrypt"'+(selectedOp==='des_decrypt'?' selected':'')+'>Decrypt</option>';
     } else if(algo === 'chacha20') {
-        opSelect.innerHTML += '<option value="chacha20_encrypt">Encrypt</option>';
-        opSelect.innerHTML += '<option value="chacha20_decrypt">Decrypt</option>';
+        opSelect.innerHTML += '<option value="chacha20_encrypt"'+(selectedOp==='chacha20_encrypt'?' selected':'')+'>Encrypt</option>';
+        opSelect.innerHTML += '<option value="chacha20_decrypt"'+(selectedOp==='chacha20_decrypt'?' selected':'')+'>Decrypt</option>';
+    }
+}
+function updateAsymmetricOperation() {
+    var algo = document.getElementById('asymmetric_algorithm').value;
+    var opSelect = document.getElementById('asymmetric_operation');
+    var selectedOp = "{{ request.form.get('operation', '') }}";
+    opSelect.innerHTML = '';
+    if(algo === 'rsa') {
+        opSelect.innerHTML += '<option value="rsa_encrypt"'+(selectedOp==='rsa_encrypt'?' selected':'')+'>Encrypt</option>';
+        opSelect.innerHTML += '<option value="rsa_decrypt"'+(selectedOp==='rsa_decrypt'?' selected':'')+'>Decrypt</option>';
     }
 }
 window.onload = function() {
@@ -180,6 +199,7 @@ window.onload = function() {
     if(document.getElementById('hash-tab').classList.contains('active')) activeTab = 'hash';
     toggleInputMode(activeTab);
     updateSymmetricOperation();
+    updateAsymmetricOperation();
 };
 </script>
         <!-- Asymmetric Encryption Tab -->
@@ -210,14 +230,14 @@ window.onload = function() {
                         <div class="mb-3">
                             <label for="asymmetric_algorithm" class="form-label">Algorithm</label>
                             <select class="form-select" id="asymmetric_algorithm" name="asymmetric_algorithm" onchange="updateAsymmetricOperation()">
-                                <option value="rsa" selected>RSA</option>
+                                <option value="rsa" {% if request.form.get('asymmetric_algorithm', 'rsa') == 'rsa' %}selected{% endif %}>RSA</option>
                             </select>
                         </div>
                         <div class="mb-3">
                             <label for="asymmetric_operation" class="form-label">Operation</label>
                             <select class="form-select" id="asymmetric_operation" name="operation">
-                                <option value="rsa_encrypt">Encrypt</option>
-                                <option value="rsa_decrypt">Decrypt</option>
+                                <option value="rsa_encrypt" {% if request.form.get('operation') == 'rsa_encrypt' %}selected{% endif %}>Encrypt</option>
+                                <option value="rsa_decrypt" {% if request.form.get('operation') == 'rsa_decrypt' %}selected{% endif %}>Decrypt</option>
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Process</button>
@@ -239,26 +259,6 @@ window.onload = function() {
                 </div>
             </div>
         </div>
-        <script>
-function updateAsymmetricOperation() {
-    var algo = document.getElementById('asymmetric_algorithm').value;
-    var opSelect = document.getElementById('asymmetric_operation');
-    opSelect.innerHTML = '';
-    if(algo === 'rsa') {
-        opSelect.innerHTML += '<option value="rsa_encrypt">Encrypt</option>';
-        opSelect.innerHTML += '<option value="rsa_decrypt">Decrypt</option>';
-    }
-}
-window.onload = function() {
-    // Detect which tab is active
-    var activeTab = 'symmetric';
-    if(document.getElementById('asymmetric-tab').classList.contains('active')) activeTab = 'asymmetric';
-    if(document.getElementById('hash-tab').classList.contains('active')) activeTab = 'hash';
-    toggleInputMode(activeTab);
-    updateSymmetricOperation();
-    updateAsymmetricOperation();
-};
-</script>
         <!-- Hash Functions Tab -->
         <div class="tab-pane fade {% if request.form.get('active_tab') == 'hash' %}show active{% endif %}" id="hash" role="tabpanel">
             <div class="card crypto-card shadow">
