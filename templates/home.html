@@ -124,14 +124,18 @@
                             <input class="form-control" type="file" id="input_file" name="input_file">
                         </div>
                         <div class="mb-3">
-                            <label for="operation_symmetric" class="form-label">Select Symmetric Operation</label>
-                            <select class="form-select" id="operation_symmetric" name="operation">
-                                <option value="aes_encrypt">AES Encrypt</option>
-                                <option value="aes_decrypt">AES Decrypt</option>
-                                <option value="des_encrypt">DES Encrypt</option>
-                                <option value="des_decrypt">DES Decrypt</option>
-                                <option value="chacha20_encrypt">ChaCha20 Encrypt</option>
-                                <option value="chacha20_decrypt">ChaCha20 Decrypt</option>
+                            <label for="symmetric_algorithm" class="form-label">Algorithm</label>
+                            <select class="form-select" id="symmetric_algorithm" name="symmetric_algorithm" onchange="updateSymmetricOperation()">
+                                <option value="aes" selected>AES</option>
+                                <option value="des">DES</option>
+                                <option value="chacha20">ChaCha20</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="symmetric_operation" class="form-label">Operation</label>
+                            <select class="form-select" id="symmetric_operation" name="operation">
+                                <option value="aes_encrypt">Encrypt</option>
+                                <option value="aes_decrypt">Decrypt</option>
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Process</button>
@@ -153,6 +157,31 @@
                 </div>
             </div>
         </div>
+        <script>
+function updateSymmetricOperation() {
+    var algo = document.getElementById('symmetric_algorithm').value;
+    var opSelect = document.getElementById('symmetric_operation');
+    opSelect.innerHTML = '';
+    if(algo === 'aes') {
+        opSelect.innerHTML += '<option value="aes_encrypt">Encrypt</option>';
+        opSelect.innerHTML += '<option value="aes_decrypt">Decrypt</option>';
+    } else if(algo === 'des') {
+        opSelect.innerHTML += '<option value="des_encrypt">Encrypt</option>';
+        opSelect.innerHTML += '<option value="des_decrypt">Decrypt</option>';
+    } else if(algo === 'chacha20') {
+        opSelect.innerHTML += '<option value="chacha20_encrypt">Encrypt</option>';
+        opSelect.innerHTML += '<option value="chacha20_decrypt">Decrypt</option>';
+    }
+}
+window.onload = function() {
+    // Detect which tab is active
+    var activeTab = 'symmetric';
+    if(document.getElementById('asymmetric-tab').classList.contains('active')) activeTab = 'asymmetric';
+    if(document.getElementById('hash-tab').classList.contains('active')) activeTab = 'hash';
+    toggleInputMode(activeTab);
+    updateSymmetricOperation();
+};
+</script>
         <!-- Asymmetric Encryption Tab -->
         <div class="tab-pane fade {% if request.form.get('active_tab') == 'asymmetric' %}show active{% endif %}" id="asymmetric" role="tabpanel">
             <div class="card crypto-card shadow">
@@ -179,10 +208,16 @@
                             <input class="form-control" type="file" id="input_file_asym" name="input_file">
                         </div>
                         <div class="mb-3">
-                            <label for="operation_asymmetric" class="form-label">Select Asymmetric Operation</label>
-                            <select class="form-select" id="operation_asymmetric" name="operation">
-                                <option value="rsa_encrypt">RSA Encrypt</option>
-                                <option value="rsa_decrypt">RSA Decrypt</option>
+                            <label for="asymmetric_algorithm" class="form-label">Algorithm</label>
+                            <select class="form-select" id="asymmetric_algorithm" name="asymmetric_algorithm" onchange="updateAsymmetricOperation()">
+                                <option value="rsa" selected>RSA</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="asymmetric_operation" class="form-label">Operation</label>
+                            <select class="form-select" id="asymmetric_operation" name="operation">
+                                <option value="rsa_encrypt">Encrypt</option>
+                                <option value="rsa_decrypt">Decrypt</option>
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Process</button>
@@ -204,6 +239,26 @@
                 </div>
             </div>
         </div>
+        <script>
+function updateAsymmetricOperation() {
+    var algo = document.getElementById('asymmetric_algorithm').value;
+    var opSelect = document.getElementById('asymmetric_operation');
+    opSelect.innerHTML = '';
+    if(algo === 'rsa') {
+        opSelect.innerHTML += '<option value="rsa_encrypt">Encrypt</option>';
+        opSelect.innerHTML += '<option value="rsa_decrypt">Decrypt</option>';
+    }
+}
+window.onload = function() {
+    // Detect which tab is active
+    var activeTab = 'symmetric';
+    if(document.getElementById('asymmetric-tab').classList.contains('active')) activeTab = 'asymmetric';
+    if(document.getElementById('hash-tab').classList.contains('active')) activeTab = 'hash';
+    toggleInputMode(activeTab);
+    updateSymmetricOperation();
+    updateAsymmetricOperation();
+};
+</script>
         <!-- Hash Functions Tab -->
         <div class="tab-pane fade {% if request.form.get('active_tab') == 'hash' %}show active{% endif %}" id="hash" role="tabpanel">
             <div class="card crypto-card shadow">
