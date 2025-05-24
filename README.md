@@ -119,18 +119,3 @@ The application is deployed and accessible at:
 You can access the project presentation here:  
 [https://www.youtube.com/watch?v=8ixZEIW9Y0M](https://www.youtube.com/watch?v=8ixZEIW9Y0M)
 
----
-
-## Contribution Guidelines
-
-- Each member must use their own GitHub account.
-- Make regular, meaningful commits with clear messages.
-- Use branches for new features; submit pull requests for review.
-- Review and comment on teammates’ pull requests.
-- Document major changes in commit messages.
-
----
-
-## License
-
-[MIT License](LICENSE)  <!-- Or your chosen license -->
