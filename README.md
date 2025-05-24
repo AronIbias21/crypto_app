@@ -3,10 +3,10 @@
 **Course Name:** [Applied Cryptography - CSAC 329]  
 **Date:** [May 24 2025]
 
-## Group members
-- Aron V. Ibias (@AronIbias21)
-- Jester Tapit (@TAPIT08)
-- Maria Angela Matubis (@gelatinnn)
+## Group Members
+- Aron Ibias                      [AronIbias21]
+- Maria Angela Matubis            [gelatinnn]
+- Jester Carlo Tapit              [TAPIT08]
 
 ---
 
